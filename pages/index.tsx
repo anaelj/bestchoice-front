@@ -99,7 +99,7 @@ const Home: NextPage<Props> = ({ dataApi }) => {
         <h1 className={styles.title}>
           Melhor opção <a href="#"></a>
         </h1>
-        <section>
+        <section className={styles.tableContainer}>
           <table className={styles.table}>
             <thead>
               <td></td>

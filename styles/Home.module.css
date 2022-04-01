@@ -118,6 +118,16 @@
 
 .table {
   margin-top: 16px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  max-width: 390px;
+}
+
+.tableContainer {
+  max-width: 100%;
+  margin-left: 0px;
+  padding: 5px;
+  padding-left: 0px;
 }
 
 .tableTitle {
