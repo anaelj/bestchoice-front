@@ -28,9 +28,13 @@
   flex-grow: 1;
 }
 
-.title a {
-  color: #0070f3;
+.title {
   text-decoration: none;
+
+  color: #0070f3;
+  @media (max-width: 400px) {
+    font-size: 24px !important;
+  }
 }
 
 .title a:hover,
