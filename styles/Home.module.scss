@@ -32,10 +32,10 @@
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 16px;
   color: #0070f3;
-  @media (max-width: 400px) {
-    font-size: 18px !important;
+  @media (max-width: 415px) {
+    font-size: 34px !important;
     font-weight: 700;
     img {
       width: 40px;

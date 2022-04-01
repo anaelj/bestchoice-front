@@ -82,6 +82,12 @@ const Home: NextPage<Props> = ({ dataApi }) => {
               new Date(convertDate(b.haveDate))
             ? -1
             : 1;
+        case SortTypes.priceEquitValue:
+          Number(a[sort]) === Number(b[sort])
+            ? 0
+            : Number(a[sort]) > Number(b[sort])
+            ? -1
+            : 1;
         default:
           return Number(a[sort]) === Number(b[sort])
             ? 0
@@ -287,7 +293,7 @@ const Home: NextPage<Props> = ({ dataApi }) => {
             </thead>
             <tbody>
               {localData &&
-                localData.map((item) => (
+                localData.map((item, idx) => (
                   <tr
                     key={item.name}
                     onClick={() => hendleRowSelect(item.name)}
