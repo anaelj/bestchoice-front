@@ -100,12 +100,12 @@ const Home: NextPage<Props> = ({ dataApi }) => {
   const getRowColor = (tickerName: string) => {
     if (selectedsTicker && tickerName) {
       if (selectedsTicker.find((item) => item === tickerName)) {
-        return "gray";
+        return { background: "#0090f0", color: "white" };
       } else {
-        return "";
+        return {};
       }
     } else {
-      return "";
+      return {};
     }
   };
 
@@ -290,9 +290,7 @@ const Home: NextPage<Props> = ({ dataApi }) => {
                   <tr
                     key={item.name}
                     onClick={() => hendleRowSelect(item.name)}
-                    style={{
-                      background: `${getRowColor(item.name)}`,
-                    }}
+                    style={getRowColor(item.name)}
                   >
                     <td>{item.name}</td>
                     <td>{item.priceQuoteValue}</td>
