@@ -195,7 +195,7 @@ const Home: NextPage<Props> = ({ dataApi }) => {
                 <input
                   type="text"
                   name="margin"
-                  placeholder=">="
+                  placeholder="<="
                   onChange={(e) =>
                     handleFilter(
                       Number(e.target.value),
