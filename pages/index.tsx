@@ -126,7 +126,7 @@ const Home: NextPage<Props> = ({ dataApi }) => {
 
       <main className={styles.main}>
         <span className={styles.title}>
-          <Image src="/sextante.png" alt="logo" />
+          <Image src="/sextante.png" alt="logo" width={60} height={60} />
           Melhor opção
         </span>
         <section className={styles.tableContainer}>
