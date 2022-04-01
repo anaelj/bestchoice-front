@@ -118,8 +118,6 @@
 
 .table {
   margin-top: 16px;
-  overflow-x: scroll;
-  overflow-y: scroll;
   max-width: 390px;
 }
 
@@ -128,6 +126,8 @@
   margin-left: 0px;
   padding: 5px;
   padding-left: 0px;
+  margin-right: 6px;
+  overflow-x: scroll;
 }
 
 .tableTitle {
