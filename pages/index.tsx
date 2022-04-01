@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Home.module.scss";
 import { db } from "./api/firebase";
 import { getDocs, collection } from "firebase/firestore";
 import { ITicker } from "./../src/interfaces/ticker";
@@ -35,7 +35,7 @@ const Home: NextPage<Props> = ({ dataApi }) => {
 
   const [sort, setSort] = useState<SortTypes>(SortTypes.name);
   const [localData, setLocalData] = useState<ITicker[]>([]);
-  const [grouthFilter, setGrouthFilter] = useState(0);
+  const [selectedsTicker, setSelectedsTicker] = useState<string[]>([]);
 
   const handleFilter = (value: number, field: SortTypes) => {
     console.log(value);
@@ -43,6 +43,17 @@ const Home: NextPage<Props> = ({ dataApi }) => {
       return Number(item[field]) >= Number(value);
     });
     setLocalData([...temp]);
+  };
+
+  const hendleRowSelect = (selectedItem: string) => {
+    const itemFound = selectedsTicker.find((item) => item === selectedItem);
+    if (itemFound) {
+      setSelectedsTicker((state) => [
+        ...state.filter((item) => item !== selectedItem),
+      ]);
+    } else {
+      setSelectedsTicker((state) => [...state, selectedItem]);
+    }
   };
 
   useEffect(() => {
@@ -85,6 +96,18 @@ const Home: NextPage<Props> = ({ dataApi }) => {
   // useEffect(() => {
   //   console.log(dataApi);
   // }, [dataApi]);
+
+  const getRowColor = (tickerName: string) => {
+    if (selectedsTicker && tickerName) {
+      if (selectedsTicker.find((item) => item === tickerName)) {
+        return "gray";
+      } else {
+        return "";
+      }
+    } else {
+      return "";
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -264,7 +287,13 @@ const Home: NextPage<Props> = ({ dataApi }) => {
             <tbody>
               {localData &&
                 localData.map((item) => (
-                  <tr key={item.name}>
+                  <tr
+                    key={item.name}
+                    onClick={() => hendleRowSelect(item.name)}
+                    style={{
+                      background: `${getRowColor(item.name)}`,
+                    }}
+                  >
                     <td>{item.name}</td>
                     <td>{item.priceQuoteValue}</td>
                     <td>{item.dividendYeld}</td>

@@ -106,7 +106,6 @@
 .logo {
   height: 2em;
   margin-left: 0.5rem;
-
 }
 
 @media (max-width: 600px) {
@@ -119,6 +118,12 @@
 .table {
   margin-top: 16px;
   max-width: 390px;
+
+  tbody {
+    tr {
+      cursor: pointer;
+    }
+  }
 }
 
 .tableContainer {
@@ -128,6 +133,12 @@
   padding-left: 0px;
   margin-right: 6px;
   overflow-x: scroll;
+
+  table tr td th tbody thead {
+    border: none;
+    padding: 0px;
+    margin: 0px;
+  }
 }
 
 .tableTitle {
@@ -138,5 +149,4 @@
   padding: 2px;
   color: white;
   justify-content: center;
-
 }
