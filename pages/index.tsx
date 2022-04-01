@@ -82,7 +82,7 @@ const Home: NextPage<Props> = ({ dataApi }) => {
               new Date(convertDate(b.haveDate))
             ? -1
             : 1;
-        case SortTypes.priceEquitValue:
+        case SortTypes.priceEquitValue || SortTypes.debitOfEbitida:
           Number(a[sort]) === Number(b[sort])
             ? 0
             : Number(a[sort]) > Number(b[sort])
@@ -126,7 +126,7 @@ const Home: NextPage<Props> = ({ dataApi }) => {
 
       <main className={styles.main}>
         <span className={styles.title}>
-          <img src="/sextante.png" alt="logo" />
+          <Image src="/sextante.png" alt="logo" />
           Melhor opção
         </span>
         <section className={styles.tableContainer}>
@@ -159,7 +159,7 @@ const Home: NextPage<Props> = ({ dataApi }) => {
                 <input
                   type="text"
                   name="pvp"
-                  placeholder=">="
+                  placeholder="<="
                   onChange={(e) =>
                     handleFilter(
                       Number(e.target.value),
