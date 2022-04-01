@@ -2,7 +2,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import { db } from "./api/firebase";
 import { getDocs, collection } from "firebase/firestore";

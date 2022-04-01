@@ -73,7 +73,6 @@ const Ticker: NextPage<Props> = ({ dataApi }) => {
         <title>Best Choice</title>
         <meta name="description" content="Pesquisa de ações por indicadores" />
         <meta name="description" content="Filtre ações por indicadores" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
