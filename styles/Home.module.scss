@@ -30,10 +30,16 @@
 
 .title {
   text-decoration: none;
-
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: #0070f3;
   @media (max-width: 400px) {
     font-size: 18px !important;
+    font-weight: 700;
+    img {
+      width: 40px;
+    }
   }
 }
 

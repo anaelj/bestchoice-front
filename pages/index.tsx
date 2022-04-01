@@ -119,9 +119,10 @@ const Home: NextPage<Props> = ({ dataApi }) => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Melhor opção <a href="#"></a>
-        </h1>
+        <span className={styles.title}>
+          <img src="/sextante.png" alt="logo" />
+          Melhor opção
+        </span>
         <section className={styles.tableContainer}>
           <table className={styles.table}>
             <thead>
