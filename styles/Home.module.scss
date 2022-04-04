@@ -130,6 +130,12 @@
   max-width: 390px;
 
   tbody {
+    tr:hover {
+      background-color: #0070f3;
+      filter: brightness(150%);
+      color: white;
+    }
+
     tr {
       cursor: pointer;
     }
