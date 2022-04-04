@@ -33,14 +33,21 @@ const Home: NextPage<Props> = ({ dataApi }) => {
     haveDate = "haveDate",
   }
 
-  const [sort, setSort] = useState<SortTypes>(SortTypes.name);
+  const [sorts, setSorts] = useState<SortTypes[]>([]);
   const [localData, setLocalData] = useState<ITicker[]>([]);
   const [selectedsTicker, setSelectedsTicker] = useState<string[]>([]);
 
   const handleFilter = (value: number, field: SortTypes) => {
-    console.log(value);
-    const temp = localData.filter((item) => {
-      return Number(item[field]) >= Number(value);
+    console.log(field);
+    const temp = dataApi.filter((item) => {
+      switch (field) {
+        case SortTypes.priceProfit || SortTypes.priceEquitValue:
+          return Number(item[field]) <= Number(value);
+        case SortTypes.debitOfEbitida:
+          return Number(item[field]) <= Number(value);
+        default:
+          return Number(item[field]) >= Number(value);
+      }
     });
     setLocalData([...temp]);
   };
@@ -70,35 +77,48 @@ const Home: NextPage<Props> = ({ dataApi }) => {
       }
     };
 
-    const dataSorted = dataApi.sort(function (a, b) {
-      switch (sort) {
-        case SortTypes.name:
-          return a.name === b.name ? 0 : a.name > b.name ? 1 : -1;
-        case SortTypes.haveDate:
-          return new Date(convertDate(a.haveDate)) ===
-            new Date(convertDate(b.haveDate))
-            ? 0
-            : new Date(convertDate(a.haveDate)) >
-              new Date(convertDate(b.haveDate))
-            ? -1
-            : 1;
-        case SortTypes.priceEquitValue || SortTypes.debitOfEbitida:
-          Number(a[sort]) === Number(b[sort])
-            ? 0
-            : Number(a[sort]) > Number(b[sort])
-            ? -1
-            : 1;
-        default:
-          return Number(a[sort]) === Number(b[sort])
-            ? 0
-            : Number(a[sort]) > Number(b[sort])
-            ? 1
-            : -1;
-      }
-    });
-    setLocalData([...dataSorted]);
+    // console.log(sorts.length);
+
+    let dataSorted: ITicker[] = [];
+
+    if (sorts.length > 0) {
+      sorts.forEach((sort) => {
+        dataSorted = localData.sort(function (a, b) {
+          switch (sort) {
+            case SortTypes.name:
+              return a.name === b.name ? 0 : a.name > b.name ? 1 : -1;
+            case SortTypes.haveDate:
+              return new Date(convertDate(a.haveDate)) ===
+                new Date(convertDate(b.haveDate))
+                ? 0
+                : new Date(convertDate(a.haveDate)) >
+                  new Date(convertDate(b.haveDate))
+                ? -1
+                : 1;
+            case SortTypes.priceProfit ||
+              SortTypes.debitOfEbitida ||
+              SortTypes.priceEquitValue:
+              Number(a[sort]) === Number(b[sort])
+                ? 0
+                : Number(a[sort]) < Number(b[sort])
+                ? 1
+                : -1;
+
+            default:
+              return Number(a[sort]) === Number(b[sort])
+                ? 0
+                : Number(a[sort]) > Number(b[sort])
+                ? 1
+                : -1;
+          }
+        });
+      });
+      setLocalData([...dataSorted]);
+    } else {
+      setLocalData([...dataApi]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort]);
+  }, [sorts]);
   // useEffect(() => {
   //   console.log(dataApi);
   // }, [dataApi]);
@@ -132,164 +152,197 @@ const Home: NextPage<Props> = ({ dataApi }) => {
         <section className={styles.tableContainer}>
           <table className={styles.table}>
             <thead>
-              <td></td>
-              <td></td>
+              <tr>
+                <td></td>
+                <td></td>
 
-              <td>
-                <input
-                  type="text"
-                  name="pvp"
-                  placeholder=">="
-                  onChange={(e) =>
-                    handleFilter(Number(e.target.value), SortTypes.dividendYeld)
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="pvp"
-                  placeholder=">="
-                  onChange={(e) =>
-                    handleFilter(Number(e.target.value), SortTypes.priceProfit)
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="pvp"
-                  placeholder="<="
-                  onChange={(e) =>
-                    handleFilter(
-                      Number(e.target.value),
-                      SortTypes.debitOfEbitida
-                    )
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="pvp"
-                  placeholder=">="
-                  onChange={(e) =>
-                    handleFilter(Number(e.target.value), SortTypes.tagAlong)
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="pvp"
-                  placeholder=">="
-                  onChange={(e) =>
-                    handleFilter(
-                      Number(e.target.value),
-                      SortTypes.priceEquitValue
-                    )
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="margin"
-                  placeholder="<="
-                  onChange={(e) =>
-                    handleFilter(
-                      Number(e.target.value),
-                      SortTypes.profitMarginLiquid
-                    )
-                  }
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  name="growth"
-                  placeholder=">="
-                  onChange={(e) =>
-                    handleFilter(Number(e.target.value), SortTypes.growth)
-                  }
-                />
-              </td>
+                <td>
+                  <input
+                    type="text"
+                    name="dividentyeld"
+                    placeholder=">="
+                    onChange={(e) =>
+                      handleFilter(
+                        Number(e.target.value),
+                        SortTypes.dividendYeld
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="pl"
+                    placeholder="<="
+                    onChange={(e) =>
+                      handleFilter(
+                        Number(e.target.value),
+                        SortTypes.priceProfit
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="debitOfEbitida"
+                    placeholder="<="
+                    onChange={(e) =>
+                      handleFilter(
+                        Number(e.target.value),
+                        SortTypes.debitOfEbitida
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="tagalog"
+                    placeholder=">="
+                    onChange={(e) =>
+                      handleFilter(Number(e.target.value), SortTypes.tagAlong)
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="pvp"
+                    placeholder="<="
+                    onChange={(e) =>
+                      handleFilter(
+                        Number(e.target.value),
+                        SortTypes.priceEquitValue
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="margin"
+                    placeholder=">="
+                    onChange={(e) =>
+                      handleFilter(
+                        Number(e.target.value),
+                        SortTypes.profitMarginLiquid
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="growth"
+                    placeholder=">="
+                    onChange={(e) =>
+                      handleFilter(Number(e.target.value), SortTypes.growth)
+                    }
+                  />
+                </td>
+              </tr>
             </thead>
             <thead>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "70px" }}
-                onClick={() => setSort(SortTypes.name)}
-              >
-                Sigla
-                <MdSwapVert />
-              </td>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "90px" }}
-                onClick={() => setSort(SortTypes.price)}
-              >
-                Preço <MdSwapVert />
-              </td>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "90px" }}
-                onClick={() => setSort(SortTypes.dividendYeld)}
-              >
-                Div. Yeld <MdSwapVert />
-              </td>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "80px" }}
-                onClick={() => setSort(SortTypes.priceProfit)}
-              >
-                PL <MdSwapVert />
-              </td>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "100px" }}
-                onClick={() => setSort(SortTypes.debitOfEbitida)}
-              >
-                D/Ebitida <MdSwapVert />
-              </td>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "100px" }}
-                onClick={() => setSort(SortTypes.tagAlong)}
-              >
-                Tag Along <MdSwapVert />
-              </td>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "70px" }}
-                onClick={() => setSort(SortTypes.priceEquitValue)}
-              >
-                P/VP <MdSwapVert />
-              </td>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "90px" }}
-                onClick={() => setSort(SortTypes.profitMarginLiquid)}
-              >
-                Marg. Liq.
-                <MdSwapVert />
-              </td>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "90px" }}
-                onClick={() => setSort(SortTypes.growth)}
-              >
-                Cresc. 5a
-                <MdSwapVert />
-              </td>
-              <td
-                className={styles.tableTitle}
-                style={{ width: "90px" }}
-                onClick={() => setSort(SortTypes.haveDate)}
-              >
-                Data Com
-                <MdSwapVert />
-              </td>
+              <tr>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "70px" }}
+                  onClick={() =>
+                    setSorts((state) => [...state, SortTypes.name])
+                  }
+                >
+                  Sigla
+                  <MdSwapVert />
+                </td>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "90px" }}
+                  onClick={() =>
+                    setSorts((state) => [...state, SortTypes.price])
+                  }
+                >
+                  Preço <MdSwapVert />
+                </td>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "90px" }}
+                  onClick={() =>
+                    setSorts((state) => [...state, SortTypes.dividendYeld])
+                  }
+                >
+                  Div. Yeld <MdSwapVert />
+                </td>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "80px" }}
+                  onClick={() =>
+                    setSorts((state) => [...state, SortTypes.priceProfit])
+                  }
+                >
+                  PL <MdSwapVert />
+                </td>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "100px" }}
+                  onClick={() =>
+                    setSorts((state) => [...state, SortTypes.debitOfEbitida])
+                  }
+                >
+                  D/Ebitida <MdSwapVert />
+                </td>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "100px" }}
+                  onClick={() =>
+                    setSorts((state) => [...state, SortTypes.tagAlong])
+                  }
+                >
+                  Tag Along <MdSwapVert />
+                </td>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "70px" }}
+                  onClick={() =>
+                    setSorts((state) => [...state, SortTypes.priceEquitValue])
+                  }
+                >
+                  P/VP <MdSwapVert />
+                </td>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "90px" }}
+                  onClick={() =>
+                    setSorts((state) => [
+                      ...state,
+                      SortTypes.profitMarginLiquid,
+                    ])
+                  }
+                >
+                  Marg. Liq.
+                  <MdSwapVert />
+                </td>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "90px" }}
+                  onClick={() =>
+                    setSorts((state) => [...state, SortTypes.growth])
+                  }
+                >
+                  Cresc. 5a
+                  <MdSwapVert />
+                </td>
+                <td
+                  className={styles.tableTitle}
+                  style={{ width: "90px" }}
+                  onClick={() =>
+                    setSorts((state) => [...state, SortTypes.haveDate])
+                  }
+                >
+                  Data Com
+                  <MdSwapVert />
+                </td>
+              </tr>
             </thead>
             <tbody>
               {localData &&
