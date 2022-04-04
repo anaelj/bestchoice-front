@@ -142,7 +142,9 @@
   padding: 5px;
   padding-left: 0px;
   margin-right: 6px;
-  overflow-x: scroll;
+  @media (max-width: 415px) {
+    overflow-x: scroll;
+  }
 
   table tr td th tbody thead {
     border: none;
